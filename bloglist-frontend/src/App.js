@@ -20,7 +20,18 @@ class App extends React.Component {
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
     )
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({user})
+    }
   } 
+  logout = (event) => {
+    event.preventDefault()
+    console.log('logout event thrown')
+    window.localStorage.removeItem('loggedBlogappUser')
+    this.setState({user: null})
+  }
   login = async (event) => {
     event.preventDefault()
     console.log('login event thrown')
@@ -29,7 +40,8 @@ class App extends React.Component {
         username: this.state.username,
         password: this.state.password
       })
-      console.log(`Login service returned ${user}`)
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      console.log(`Login service returned ${JSON.stringify(user)}`)
       this.setState({ username: '', password: '', user})
     }
     catch(exception) {
@@ -73,7 +85,13 @@ class App extends React.Component {
            </form>
         </div>
     )
-
+    const logoutForm = () => (
+      <div>
+        <form onSubmit={this.logout} >
+          {this.state.user.name} logged in <button type="submit">logout</button>
+        </form>
+      </div>
+    )
     const blogsForm = () => (
       <div>
          <h2>blogs</h2>
@@ -94,7 +112,7 @@ class App extends React.Component {
     return (
       <div>
         <Notification message={this.state.error} />
-        <p>{this.state.user.name} logged in</p>
+        { logoutForm() }
         { blogsForm() }
       </div>
     )
