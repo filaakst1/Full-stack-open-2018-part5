@@ -9,13 +9,16 @@ class App extends React.Component {
     super(props)
     this.state = {
       blogs: [],
+      newBlog: {},
       error: null,
       username: '',
       password: '',
       user: null
     }
   }
-
+  /**
+   * Do stuff after component mounting
+   */
   componentDidMount() {
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
@@ -24,14 +27,22 @@ class App extends React.Component {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({user})
+      blogService.setToken(user.token)
     }
   } 
-  logout = (event) => {
+  /**
+   * Logout function
+   */
+  logout = async (event) => {
     event.preventDefault()
     console.log('logout event thrown')
     window.localStorage.removeItem('loggedBlogappUser')
     this.setState({user: null})
+    blogService.setToken(null)
   }
+/**
+ * Login function
+ */
   login = async (event) => {
     event.preventDefault()
     console.log('login event thrown')
@@ -40,6 +51,7 @@ class App extends React.Component {
         username: this.state.username,
         password: this.state.password
       })
+      blogService.setToken(user.token)
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       console.log(`Login service returned ${JSON.stringify(user)}`)
       this.setState({ username: '', password: '', user})
@@ -54,11 +66,54 @@ class App extends React.Component {
       }, 5000)
     }
   }
+  /**
+   * Handles login form changes
+   */
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
-  
+  /**
+   * Handles blog adding form changes
+   */
+  handleBlogFieldChange = (event) => {
+    const newState = this.state.newBlog
+    if(event.target.name === 'title') {
+      newState.title = event.target.value
+    }
+
+    if(event.target.name === 'author') {
+      newState.author = event.target.value
+    }
+
+    if(event.target.name === 'url') {
+      newState.url = event.target.value
+    }
+    this.setState({ newBlog: newState} )
+    console.log('Change event ' + JSON.stringify(this.state.newBlog))
+  }
+  /**
+   * Event handler for submitting new blog
+   */
+  addBlog = (event) => {
+    event.preventDefault()
+    console.log("Blog submitted")
+    const blogObject = this.state.newBlog
+    blogService
+      .create(blogObject)
+      .then(newBlog => {
+        this.setState({
+          blogs: this.state.blogs.concat(newBlog),
+          newBlog: {}
+        })
+      })
+  }
+/**
+ * Rendering function
+ */
   render() {
+    /**
+     * Login form
+     */
     const loginForm = () => (
       <div>
           <h2>Log in to application</h2>
@@ -85,6 +140,9 @@ class App extends React.Component {
            </form>
         </div>
     )
+    /**
+     * Logout form
+     */
     const logoutForm = () => (
       <div>
         <form onSubmit={this.logout} >
@@ -92,12 +150,27 @@ class App extends React.Component {
         </form>
       </div>
     )
+    /**
+     * New blog form
+     */
     const blogsForm = () => (
       <div>
          <h2>blogs</h2>
+         { logoutForm() }
+         <h2>create new</h2>
+         <div>
+           <form onSubmit={this.addBlog} >
+             <div>title<input  type="text" name="title" value={this.state.newBlog.title} onChange={this.handleBlogFieldChange} /></div>
+             <div>author<input type="text" name="author" value={this.state.newBlog.author} onChange={this.handleBlogFieldChange}/></div>
+             <div>url<input type="text" name="url" value={this.state.newBlog.url} onChange={this.handleBlogFieldChange}/></div>
+             <div><button type="submit">create</button></div>
+           </form>
+         </div>
+         <div>
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog}/>
         )}
+        </div>
       </div>
     )
     
@@ -112,7 +185,6 @@ class App extends React.Component {
     return (
       <div>
         <Notification message={this.state.error} />
-        { logoutForm() }
         { blogsForm() }
       </div>
     )
