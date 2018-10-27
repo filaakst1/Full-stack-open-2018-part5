@@ -22,15 +22,13 @@ class App extends React.Component {
     event.preventDefault()
     console.log('logging in with', this.state.username, this.state.password)
   }
-  handlePasswordChange = (event) => {
-    this.setState({ password: event.target.value })
+  handleLoginFieldChange = (event) => {
+    if (event.target.name === 'password') {
+      this.setState({ password: event.target.value })
+    } else if (event.target.name === 'username') {
+      this.setState({ username: event.target.value })
+    }
   }
-
-  handleUsernameChange = (event) => {
-    this.setState({ username: event.target.value })
-  }
-
-
 
   render() {
     if (this.state.user === null) {
@@ -42,16 +40,18 @@ class App extends React.Component {
              username
              <input
                type="text"
+               name="username"
                value={this.state.username}
-               onChange={this.handleUsernameChange}
+               onChange={this.handleLoginFieldChange}
              />
            </div>
            <div>
              password
              <input
                type="password"
+               name="password"
                value={this.state.password}
-               onChange={this.handlePasswordChange}
+               onChange={this.handleLoginFieldChange}
              />
            </div>
            <button type="submit">login</button>
