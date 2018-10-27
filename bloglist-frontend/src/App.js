@@ -18,6 +18,19 @@ class App extends React.Component {
       this.setState({ blogs })
     )
   } 
+  login = (event) => {
+    event.preventDefault()
+    console.log('logging in with', this.state.username, this.state.password)
+  }
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value })
+  }
+
+  handleUsernameChange = (event) => {
+    this.setState({ username: event.target.value })
+  }
+
+
 
   render() {
     if (this.state.user === null) {
