@@ -23,11 +23,7 @@ class App extends React.Component {
     console.log('logging in with', this.state.username, this.state.password)
   }
   handleLoginFieldChange = (event) => {
-    if (event.target.name === 'password') {
-      this.setState({ password: event.target.value })
-    } else if (event.target.name === 'username') {
-      this.setState({ username: event.target.value })
-    }
+    this.setState({ [event.target.name]: event.target.value })
   }
 
   render() {
