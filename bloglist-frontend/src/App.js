@@ -10,7 +10,7 @@ class App extends React.Component {
     this.state = {
       blogs: [],
       newBlog: {},
-      error: null,
+      notification: null,
       username: '',
       password: '',
       user: null
@@ -59,10 +59,15 @@ class App extends React.Component {
     catch(exception) {
       console.log('login failed')
       this.setState({
-        error: 'invalid username or password',
+        notification: {
+          message: 'invalid username or password',
+          type: 'error'
+        }
       })
       setTimeout(() => {
-        this.setState({ error: null })
+        this.setState({ 
+          notification: null
+         })
       }, 5000)
     }
   }
@@ -94,18 +99,37 @@ class App extends React.Component {
   /**
    * Event handler for submitting new blog
    */
-  addBlog = (event) => {
+  addBlog = async (event) => {
     event.preventDefault()
-    console.log("Blog submitted")
+    console.log('Blog submitted')
     const blogObject = this.state.newBlog
-    blogService
-      .create(blogObject)
-      .then(newBlog => {
-        this.setState({
-          blogs: this.state.blogs.concat(newBlog),
-          newBlog: {}
-        })
+    try {
+      const newBlog = await blogService.create(blogObject)
+      this.setState({ 
+        blogs: this.state.blogs.concat(newBlog),
+        newBlog: {},
+        notification: {
+          message: `a new blog '${newBlog.title}' by ${newBlog.author} was added`,
+          type: 'info'
+        }
+      
       })
+    }
+    catch(exception) {
+      console.log('Blog adding failed')
+      this.setState({ 
+        notification: {
+          message: `Unable to add new blog - ${exception}`,
+          type: 'error'
+        }
+      
+      })  
+    }
+    setTimeout(() => {
+      this.setState({ 
+        notification: null, 
+      })
+    }, 5000)
   }
 /**
  * Rendering function
@@ -177,14 +201,14 @@ class App extends React.Component {
     if (this.state.user === null) {
       return (
         <div>
-          <Notification message={this.state.error} />
+          <Notification notification={this.state.notification} />
           { loginForm() }
         </div>
       )
     }
     return (
       <div>
-        <Notification message={this.state.error} />
+        <Notification notification={this.state.notification} />
         { blogsForm() }
       </div>
     )

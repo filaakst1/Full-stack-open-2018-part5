@@ -1,5 +1,13 @@
 import React from 'react'
-const Notification = ({message}) => (
-  <div>{message}</div>  
-)
+import './Notification.css';
+
+const Notification = ({notification}) => {
+  if(notification !== null) {
+    const clazz = notification.type === 'error' ? 'notification-error-div' : 'notification-info-div'
+    return ( 
+    <div className={clazz} >{notification.message}</div>
+    )
+  }return (<div></div>)
+
+}
 export default Notification
