@@ -5,6 +5,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './components/Togglable';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +17,6 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      loginVisible: true
     }
   }
   /**
@@ -150,22 +150,14 @@ class App extends React.Component {
       </div>
     )
     const loginForm = () => {
-      const hideWhenVisible = { display: this.state.loginVisible ? 'none' : '' }
-      const showWhenVisible = { display: this.state.loginVisible ? '' : 'none' }
       return (
         <div>
-          <div style={hideWhenVisible}>
-            <button onClick={e => this.setState({ loginVisible: true })}>log in</button>
-          </div>
-          <div style={showWhenVisible}>
-            <LoginForm 
-              handleSubmit={this.login}
-              handleChange={this.handleLoginFieldChange}
-              username={this.state.username}
-              password={this.state.password}
-            />
-            <button onClick={e => this.setState({ loginVisible: false })}>cancel</button>
-          </div>
+          <LoginForm 
+            handleSubmit={this.login}
+            handleChange={this.handleLoginFieldChange}
+            username={this.state.username}
+            password={this.state.password}
+          />
         </div>
       )
     }
@@ -176,33 +168,29 @@ class App extends React.Component {
       <div>
          <h2>blogs</h2>
          { logoutForm() }
-         <BlogForm 
+        <Togglable buttonLabel='new blog'>
+          <BlogForm 
             handleSubmit={this.addBlog} 
             handleChange= {this.handleBlogFieldChange}
             title={this.state.newBlog.title} 
             author={this.state.newBlog.author} 
-            url={this.state.newBlog.url} />
-        
-         <div>
+            url={this.state.newBlog.url}
+          />
+        </Togglable>
+        <div>
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog}/>
         )}
         </div>
       </div>
     )
-    
-    if (this.state.user === null) {
-      return (
-        <div>
-          <Notification notification={this.state.notification} />
-          {loginForm()}
-        </div>
-      )
-    }
     return (
       <div>
         <Notification notification={this.state.notification} />
-        { blogsForm() }
+        {this.state.user===null ?
+          loginForm() :
+          blogsForm() 
+        } 
       </div>
     )
   }
