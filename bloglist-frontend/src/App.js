@@ -117,6 +117,7 @@ class App extends React.Component {
         }
       
       })
+      this.blogForm.toggleVisibility()
     }
     catch(exception) {
       console.log('Blog adding failed')
@@ -168,7 +169,7 @@ class App extends React.Component {
       <div>
          <h2>blogs</h2>
          { logoutForm() }
-        <Togglable buttonLabel='new blog'>
+        <Togglable buttonLabel='new blog' ref={component => this.blogForm = component}>
           <BlogForm 
             handleSubmit={this.addBlog} 
             handleChange= {this.handleBlogFieldChange}
