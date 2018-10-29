@@ -1,5 +1,7 @@
 import React from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -13,7 +15,8 @@ class App extends React.Component {
       notification: null,
       username: '',
       password: '',
-      user: null
+      user: null,
+      loginVisible: true
     }
   }
   /**
@@ -135,35 +138,7 @@ class App extends React.Component {
  * Rendering function
  */
   render() {
-    /**
-     * Login form
-     */
-    const loginForm = () => (
-      <div>
-          <h2>Log in to application</h2>
-          <form onSubmit={this.login}>
-             <div>
-               username
-               <input
-                 type="text"
-                 name="username"
-                 value={this.state.username}
-                 onChange={this.handleLoginFieldChange}
-               />
-             </div>
-             <div>
-               password
-               <input
-                 type="password"
-                 name="password"
-                 value={this.state.password}
-                 onChange={this.handleLoginFieldChange}
-               />
-             </div>
-             <button type="submit">login</button>
-           </form>
-        </div>
-    )
+
     /**
      * Logout form
      */
@@ -174,6 +149,26 @@ class App extends React.Component {
         </form>
       </div>
     )
+    const loginForm = () => {
+      const hideWhenVisible = { display: this.state.loginVisible ? 'none' : '' }
+      const showWhenVisible = { display: this.state.loginVisible ? '' : 'none' }
+      return (
+        <div>
+          <div style={hideWhenVisible}>
+            <button onClick={e => this.setState({ loginVisible: true })}>log in</button>
+          </div>
+          <div style={showWhenVisible}>
+            <LoginForm 
+              handleSubmit={this.login}
+              handleChange={this.handleLoginFieldChange}
+              username={this.state.username}
+              password={this.state.password}
+            />
+            <button onClick={e => this.setState({ loginVisible: false })}>cancel</button>
+          </div>
+        </div>
+      )
+    }
     /**
      * New blog form
      */
@@ -181,15 +176,13 @@ class App extends React.Component {
       <div>
          <h2>blogs</h2>
          { logoutForm() }
-         <h2>create new</h2>
-         <div>
-           <form onSubmit={this.addBlog} >
-             <div>title<input  type="text" name="title" value={this.state.newBlog.title} onChange={this.handleBlogFieldChange} /></div>
-             <div>author<input type="text" name="author" value={this.state.newBlog.author} onChange={this.handleBlogFieldChange}/></div>
-             <div>url<input type="text" name="url" value={this.state.newBlog.url} onChange={this.handleBlogFieldChange}/></div>
-             <div><button type="submit">create</button></div>
-           </form>
-         </div>
+         <BlogForm 
+            handleSubmit={this.addBlog} 
+            handleChange= {this.handleBlogFieldChange}
+            title={this.state.newBlog.title} 
+            author={this.state.newBlog.author} 
+            url={this.state.newBlog.url} />
+        
          <div>
         {this.state.blogs.map(blog => 
           <Blog key={blog._id} blog={blog}/>
@@ -202,7 +195,7 @@ class App extends React.Component {
       return (
         <div>
           <Notification notification={this.state.notification} />
-          { loginForm() }
+          {loginForm()}
         </div>
       )
     }
