@@ -23,8 +23,9 @@ class App extends React.Component {
    * Do stuff after component mounting
    */
   componentDidMount() {
+    console.log('Mounted')
     blogService.getAll().then(blogs =>
-      this.setState({ blogs })
+     this.setState({ blogs })
     )
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -135,6 +136,23 @@ class App extends React.Component {
       })
     }, 5000)
   }
+  likeBlog = async (blog) => {
+    console.log(`Like clicked`)
+    // Load all blogs, getting single blog would be better but it's not implemented
+    const blogs = await blogService.getAll()
+    console.log(`All ${JSON.stringify(blogs)}`)
+    const blogToUpdate = blogs.filter(b => b._id === blog._id).reduce((acc, curr)=>acc)
+    try {
+      console.log(`Found ${JSON.stringify(blogToUpdate)}` )
+      blogToUpdate.likes = blogToUpdate.likes +1
+      await blogService.update(blogToUpdate)
+      // Update state
+      this.setState({blogs})
+    }catch (exception ) {
+      console.log('Update failed')
+    }
+    
+  }
 /**
  * Rendering function
  */
@@ -180,7 +198,12 @@ class App extends React.Component {
         </Togglable>
         <div>
         {this.state.blogs.map(blog => 
-          <Blog key={blog._id} blog={blog}/>
+          <Blog 
+            key={blog._id} 
+            blog={blog} 
+            likeButtonAction={this.likeBlog}
+            ref={component => this.t1 = component}
+          />
         )}
         </div>
       </div>

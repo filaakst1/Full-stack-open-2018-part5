@@ -19,4 +19,21 @@ const create = async (newObject) => {
   console.log('Response'  + JSON.stringify(response))
   return response.data
 }
-export default { getAll, create,setToken}
+
+const update = async (blog) => {
+  const config = {
+    headers: { 'Authorization': token }
+  }
+  // Filter to send only required fields 
+  const updated = {
+    user: blog.user._id,
+    likes: blog.likes,
+    author: blog.author,
+    title: blog.title,
+    url: blog.url
+ 
+  }
+  const response = await axios.put(baseUrl+'/' + blog._id, updated, config)
+  return response.data
+}
+export default { getAll, create,update,setToken}

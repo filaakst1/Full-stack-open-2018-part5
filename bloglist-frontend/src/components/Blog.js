@@ -1,4 +1,5 @@
 import React from 'react'
+
 class Blog extends React.Component {
   
   constructor(props) {
@@ -10,6 +11,7 @@ class Blog extends React.Component {
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
   }
+
   render() {
     const blogStyle = {
       paddingTop: 10,
@@ -27,7 +29,7 @@ class Blog extends React.Component {
         <div style={showWhenVisible}>
           <div style={blogStyle}>
             <div><a href={this.props.blog.url} >{this.props.blog.url}</a></div>
-            <div>{this.props.blog.likes} likes <button>likes</button></div>
+            <div>{this.props.blog.likes} likes <button onClick={e=> this.props.likeButtonAction(this.props.blog)} >likes</button></div>
             <div>added by {this.props.blog.user.name}</div>
           </div>
         </div>
@@ -35,5 +37,4 @@ class Blog extends React.Component {
     )
   }
 }
-
 export default Blog
