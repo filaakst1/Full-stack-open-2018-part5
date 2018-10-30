@@ -26,7 +26,7 @@ class App extends React.Component {
     console.log('Mounted')
     
     blogService.getAll()
-    .then(blogs => this.sortBlogs(blogs))
+    .then(blogs => blogs.sort(this.sortDesc))
     .then(blogs =>
      this.setState({ blogs })
     )
@@ -113,7 +113,7 @@ class App extends React.Component {
     try {
       const newBlog = await blogService.create(blogObject)
       const copy = this.state.blogs.concat(newBlog)
-      const sorted = this.sortBlogs(copy)
+      const sorted = copy.sort(this.sortDesc)
       this.setState({ 
         blogs: sorted,
         newBlog: {},
@@ -141,10 +141,11 @@ class App extends React.Component {
       })
     }, 5000)
   }
-  sortBlogs =(blogs) => {
-    const sorted= blogs.sort((a,b)=> b.likes-a.likes)
-    return sorted
-  }
+  /**
+   * Sort by descending order of likes
+   */
+  sortDesc = (a,b) => b.likes-a.likes
+
   likeBlog = async (blog) => {
     console.log(`Like clicked`)
     // Load all blogs, getting single blog would be better but it's not implemented
@@ -155,14 +156,30 @@ class App extends React.Component {
       blogToUpdate.likes = blogToUpdate.likes +1
       await blogService.update(blogToUpdate)
       // Update state
-      const sorted =this.sortBlogs(blogs)
+      const sorted =blogs.sort(this.sortDesc)
       this.setState({
         blogs:sorted
       })
     }catch (exception ) {
       console.log('Update failed')
     }
-    
+  }
+  deleteBlog = async (blog) => {
+    console.log('Delete clicked')
+    try {
+      if (window.confirm(`Delete '${blog.title}' by ${blog.author}`)) { 
+        const removed =await blogService.remove(blog)
+        const blogs = this.state.blogs
+        const filtered = blogs.filter(b => b._id !== blog._id)
+        const sorted =filtered.sort(this.sortDesc)
+        this.setState({
+          blogs: sorted
+        })
+         
+      }
+    }catch(exception) {
+      console.log('Delete failed')
+    }
   }
 /**
  * Rendering function
@@ -213,7 +230,7 @@ class App extends React.Component {
             key={blog._id} 
             blog={blog} 
             likeButtonAction={this.likeBlog}
-            ref={component => this.t1 = component}
+            deleteButtonAction={this.deleteBlog}
           />
         )}
         </div>
