@@ -24,7 +24,10 @@ class App extends React.Component {
    */
   componentDidMount() {
     console.log('Mounted')
-    blogService.getAll().then(blogs =>
+    
+    blogService.getAll()
+    .then(blogs => this.sortBlogs(blogs))
+    .then(blogs =>
      this.setState({ blogs })
     )
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -109,8 +112,10 @@ class App extends React.Component {
     const blogObject = this.state.newBlog
     try {
       const newBlog = await blogService.create(blogObject)
+      const copy = this.state.blogs.concat(newBlog)
+      const sorted = this.sortBlogs(copy)
       this.setState({ 
-        blogs: this.state.blogs.concat(newBlog),
+        blogs: sorted,
         newBlog: {},
         notification: {
           message: `a new blog '${newBlog.title}' by ${newBlog.author} was added`,
@@ -136,18 +141,24 @@ class App extends React.Component {
       })
     }, 5000)
   }
+  sortBlogs =(blogs) => {
+    const sorted= blogs.sort((a,b)=> b.likes-a.likes)
+    return sorted
+  }
   likeBlog = async (blog) => {
     console.log(`Like clicked`)
     // Load all blogs, getting single blog would be better but it's not implemented
     const blogs = await blogService.getAll()
-    console.log(`All ${JSON.stringify(blogs)}`)
     const blogToUpdate = blogs.filter(b => b._id === blog._id).reduce((acc, curr)=>acc)
     try {
-      console.log(`Found ${JSON.stringify(blogToUpdate)}` )
+      console.log(`Found ${blogToUpdate.title}` )
       blogToUpdate.likes = blogToUpdate.likes +1
       await blogService.update(blogToUpdate)
       // Update state
-      this.setState({blogs})
+      const sorted =this.sortBlogs(blogs)
+      this.setState({
+        blogs:sorted
+      })
     }catch (exception ) {
       console.log('Update failed')
     }
