@@ -5,14 +5,17 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Togglable from './components/Togglable';
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       blogs: [],
-      newBlog: {},
+      newBlog: {
+        title:'',
+        author: '',
+        url:''
+      },
       notification: null,
       username: '',
       password: '',
@@ -116,7 +119,11 @@ class App extends React.Component {
       const sorted = copy.sort(this.sortDesc)
       this.setState({ 
         blogs: sorted,
-        newBlog: {},
+        newBlog: {
+          title: '',
+          author: '',
+          url: ''
+        },
         notification: {
           message: `a new blog '${newBlog.title}' by ${newBlog.author} was added`,
           type: 'info'
@@ -225,15 +232,16 @@ class App extends React.Component {
       <div>
          <h2>blogs</h2>
          { logoutForm() }
-        <Togglable buttonLabel='new blog' ref={component => this.blogForm = component}>
+         
           <BlogForm 
+            ref={component => this.blogForm = component}
             handleSubmit={this.addBlog} 
             handleChange= {this.handleBlogFieldChange}
-            title={this.state.newBlog.title} 
+            title={this.state.newBlog.title } 
             author={this.state.newBlog.author} 
             url={this.state.newBlog.url}
           />
-        </Togglable>
+   
         <div>
         {this.state.blogs
         .map(blog => 
