@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 class Blog extends React.Component {
   
@@ -8,6 +9,7 @@ class Blog extends React.Component {
       visible: false
     }
   }
+
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
   }
@@ -38,5 +40,12 @@ class Blog extends React.Component {
       </div>
     )
   }
+}
+Blog.propTypes = {
+  blog: PropTypes.func.isRequired,
+  deleteButtonAction: PropTypes.func.isRequired,
+  deleteButtonVisible: PropTypes.func.isRequired,
+  likeButtonAction: PropTypes.func.isRequired
+  
 }
 export default Blog
