@@ -32,9 +32,9 @@ class Blog extends React.Component {
         <div style={showWhenVisible}>
           <div style={blogStyle}>
             <div><a href={this.props.blog.url} >{this.props.blog.url}</a></div>
-            <div>{this.props.blog.likes} likes <button onClick={ e => this.props.likeButtonAction(this.props.blog)} >likes</button></div>
+            <div>{this.props.blog.likes} likes <button onClick={ e => this.props.likeButtonAction(e,this.props.blog)} >likes</button></div>
             <div>added by {this.props.blog.user.name}</div>
-            <div><button style={deleteButtonVisible} onClick={ e => this.props.deleteButtonAction(this.props.blog)} >delete</button></div>
+            <div><button style={deleteButtonVisible} onClick={ e => this.props.deleteButtonAction(e,this.props.blog)} >delete</button></div>
           </div>
         </div>
       </div>
@@ -46,6 +46,6 @@ Blog.propTypes = {
   deleteButtonAction: PropTypes.func.isRequired,
   deleteButtonVisible: PropTypes.bool.isRequired,
   likeButtonAction: PropTypes.func.isRequired
-  
+
 }
 export default Blog

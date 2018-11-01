@@ -49,9 +49,9 @@ class App extends React.Component {
     this.setState({ user: null })
     blogService.setToken(null)
   }
-/**
- * Login function
- */
+  /**
+   * Login function
+   */
   login = async (event) => {
     event.preventDefault()
     console.log('login event thrown')
@@ -152,8 +152,8 @@ class App extends React.Component {
    */
   sortDesc = (a,b) => b.likes-a.likes
 
-  likeBlog = async (blog) => {
-    console.log('Like clicked')
+  likeBlog = async (event, blog) => {
+    console.log('Like clicked' + event)
     // Load all blogs, getting single blog would be better but it's not implemented
     const blogs = await blogService.getAll()
     const blogToUpdate = blogs.filter(b => b._id === blog._id).reduce((acc ) => acc )
@@ -171,8 +171,8 @@ class App extends React.Component {
       console.log('Update failed')
     }
   }
-  deleteBlog = async (blog) => {
-    console.log('Delete clicked')
+  deleteBlog = async (event, blog) => {
+    console.log('Delete clicked' + event)
     try {
       if (window.confirm(`Delete '${blog.title}' by ${blog.author}`)) { 
         await blogService.remove(blog)
