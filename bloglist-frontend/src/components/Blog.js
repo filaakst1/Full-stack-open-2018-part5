@@ -42,9 +42,9 @@ class Blog extends React.Component {
   }
 }
 Blog.propTypes = {
-  blog: PropTypes.func.isRequired,
+  blog: PropTypes.object.isRequired,
   deleteButtonAction: PropTypes.func.isRequired,
-  deleteButtonVisible: PropTypes.func.isRequired,
+  deleteButtonVisible: PropTypes.bool.isRequired,
   likeButtonAction: PropTypes.func.isRequired
   
 }

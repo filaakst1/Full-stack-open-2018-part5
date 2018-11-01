@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import './Notification.css';
 
 const Notification = ({notification}) => {
@@ -9,5 +11,8 @@ const Notification = ({notification}) => {
     )
   }return (<div></div>)
 
+}
+Notification.propTypes = {
+  notification: PropTypes.object
 }
 export default Notification

@@ -17,9 +17,9 @@ const BlogForm = ({handleSubmit, handleChange, title, author, url}) => {
 BlogForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
-  title: PropTypes.func.isRequired,
-  author: PropTypes.func.isRequired,
-  url: PropTypes.func.isRequired
+  title: PropTypes.string,
+  author: PropTypes.string,
+  url: PropTypes.string
   
 }
 export default BlogForm
