@@ -27,16 +27,15 @@ class App extends React.Component {
    */
   componentDidMount() {
     console.log('Mounted')
-    
     blogService.getAll()
-    .then(blogs => blogs.sort(this.sortDesc))
-    .then(blogs =>
-     this.setState({ blogs })
-    )
+      .then(blogs => blogs.sort(this.sortDesc))
+      .then(blogs =>
+        this.setState({ blogs })
+      )
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      this.setState({user})
+      this.setState({ user })
       blogService.setToken(user.token)
     }
   } 
@@ -47,7 +46,7 @@ class App extends React.Component {
     event.preventDefault()
     console.log('logout event thrown')
     window.localStorage.removeItem('loggedBlogappUser')
-    this.setState({user: null})
+    this.setState({ user: null })
     blogService.setToken(null)
   }
 /**
@@ -64,7 +63,7 @@ class App extends React.Component {
       blogService.setToken(user.token)
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       console.log(`Login service returned ${JSON.stringify(user)}`)
-      this.setState({ username: '', password: '', user})
+      this.setState({ username: '', password: '', user })
     }
     catch(exception) {
       console.log('login failed')
@@ -75,9 +74,9 @@ class App extends React.Component {
         }
       })
       setTimeout(() => {
-        this.setState({ 
+        this.setState({
           notification: null
-         })
+        })
       }, 5000)
     }
   }
@@ -103,7 +102,7 @@ class App extends React.Component {
     if(event.target.name === 'url') {
       newState.url = event.target.value
     }
-    this.setState({ newBlog: newState} )
+    this.setState({ newBlog: newState } )
     console.log('Change event ' + JSON.stringify(this.state.newBlog))
   }
   /**
@@ -117,7 +116,7 @@ class App extends React.Component {
       const newBlog = await blogService.create(blogObject)
       const copy = this.state.blogs.concat(newBlog)
       const sorted = copy.sort(this.sortDesc)
-      this.setState({ 
+      this.setState({
         blogs: sorted,
         newBlog: {
           title: '',
@@ -128,23 +127,23 @@ class App extends React.Component {
           message: `a new blog '${newBlog.title}' by ${newBlog.author} was added`,
           type: 'info'
         }
-      
+
       })
       this.blogForm.toggleVisibility()
     }
     catch(exception) {
       console.log('Blog adding failed')
-      this.setState({ 
+      this.setState({
         notification: {
           message: `Unable to add new blog - ${exception}`,
           type: 'error'
         }
-      
-      })  
+
+      })
     }
     setTimeout(() => {
-      this.setState({ 
-        notification: null, 
+      this.setState({
+        notification: null,
       })
     }, 5000)
   }
@@ -154,10 +153,11 @@ class App extends React.Component {
   sortDesc = (a,b) => b.likes-a.likes
 
   likeBlog = async (blog) => {
-    console.log(`Like clicked`)
+    console.log('Like clicked')
     // Load all blogs, getting single blog would be better but it's not implemented
     const blogs = await blogService.getAll()
-    const blogToUpdate = blogs.filter(b => b._id === blog._id).reduce((acc, curr)=>acc)
+    const blogToUpdate = blogs.filter(b => b._id === blog._id).reduce((acc ) => acc )
+
     try {
       console.log(`Found ${blogToUpdate.title}` )
       blogToUpdate.likes = blogToUpdate.likes +1
@@ -186,7 +186,7 @@ class App extends React.Component {
             type: 'info'
           }
         })
-         
+
       }
     }catch(exception) {
       console.log('Delete failed')
@@ -196,11 +196,11 @@ class App extends React.Component {
           type: 'error'
         }
       })
+    }
   }
-}
-/**
- * Rendering function
- */
+  /**
+   * Rendering function
+   */
   render() {
 
     /**
@@ -216,7 +216,7 @@ class App extends React.Component {
     const loginForm = () => {
       return (
         <div>
-          <LoginForm 
+          <LoginForm
             handleSubmit={this.login}
             handleChange={this.handleLoginFieldChange}
             username={this.state.username}
@@ -230,29 +230,29 @@ class App extends React.Component {
      */
     const blogsForm = () => (
       <div>
-         <h2>blogs</h2>
-         { logoutForm() }
-         
-          <BlogForm 
-            ref={component => this.blogForm = component}
-            handleSubmit={this.addBlog} 
-            handleChange= {this.handleBlogFieldChange}
-            title={this.state.newBlog.title } 
-            author={this.state.newBlog.author} 
-            url={this.state.newBlog.url}
-          />
-   
+        <h2>blogs</h2>
+        { logoutForm() }
+
+        <BlogForm
+          ref={component => this.blogForm = component}
+          handleSubmit={this.addBlog}
+          handleChange={this.handleBlogFieldChange}
+          title={this.state.newBlog.title }
+          author={this.state.newBlog.author}
+          url={this.state.newBlog.url}
+        />
+
         <div>
-        {this.state.blogs
-        .map(blog => 
-          <Blog 
-            key={blog._id} 
-            blog={blog} 
-            likeButtonAction={this.likeBlog}
-            deleteButtonAction={this.deleteBlog}
-            deleteButtonVisible={blog.user===null || this.state.user.username === blog.user.username}
-          />
-        )}
+          {this.state.blogs
+            .map(blog =>
+              <Blog
+                key={blog._id}
+                blog={blog}
+                likeButtonAction={this.likeBlog}
+                deleteButtonAction={this.deleteBlog}
+                deleteButtonVisible={blog.user===null || this.state.user.username === blog.user.username}
+              />
+            )}
         </div>
       </div>
     )
@@ -261,11 +261,11 @@ class App extends React.Component {
         <Notification notification={this.state.notification} />
         {this.state.user===null ?
           loginForm() :
-          blogsForm() 
-        } 
+          blogsForm()
+        }
       </div>
     )
   }
 }
 
-export default App;
+export default App

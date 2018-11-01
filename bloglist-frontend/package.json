@@ -17,8 +17,11 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
+    "babel-loader": "^8.0.4",
     "enzyme": "^3.7.0",
-    "enzyme-adapter-react-16": "^1.6.0"
+    "enzyme-adapter-react-16": "^1.6.0",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-react": "^7.11.1"
   },
   "browserslist": [
     ">0.2%",

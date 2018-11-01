@@ -30,16 +30,15 @@ const update = async (blog) => {
   const config = {
     headers: { 'Authorization': token }
   }
-  // Filter to send only required fields 
+  // Filter to send only required fields
   const updated = {
     user: blog.user._id,
     likes: blog.likes,
     author: blog.author,
     title: blog.title,
     url: blog.url
- 
   }
   const response = await axios.put(baseUrl+'/' + blog._id, updated, config)
   return response.data
 }
-export default { getAll, create,update,remove, setToken}
+export default { getAll, create,update,remove, setToken }
