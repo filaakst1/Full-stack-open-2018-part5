@@ -21,6 +21,7 @@ class Blog extends React.Component {
       marginBottom: 5
     }
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+    const deleteButtonVisible = { display: this.props.deleteButtonVisible ? '' : 'none'}
     return (
       <div>
         <div style={blogStyle} onClick={this.toggleVisibility} >
@@ -31,7 +32,7 @@ class Blog extends React.Component {
             <div><a href={this.props.blog.url} >{this.props.blog.url}</a></div>
             <div>{this.props.blog.likes} likes <button onClick={e=> this.props.likeButtonAction(this.props.blog)} >likes</button></div>
             <div>added by {this.props.blog.user.name}</div>
-            <div><button onClick={e=> this.props.deleteButtonAction(this.props.blog)} >delete</button></div>
+            <div><button style={deleteButtonVisible} onClick={e=> this.props.deleteButtonAction(this.props.blog)} >delete</button></div>
           </div>
         </div>
       </div>

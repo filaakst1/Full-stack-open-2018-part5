@@ -168,19 +168,29 @@ class App extends React.Component {
     console.log('Delete clicked')
     try {
       if (window.confirm(`Delete '${blog.title}' by ${blog.author}`)) { 
-        const removed =await blogService.remove(blog)
+        await blogService.remove(blog)
         const blogs = this.state.blogs
         const filtered = blogs.filter(b => b._id !== blog._id)
         const sorted =filtered.sort(this.sortDesc)
         this.setState({
-          blogs: sorted
+          blogs: sorted,
+          notification: {
+            message: `${blog.title}' by ${blog.author} deleted`,
+            type: 'info'
+          }
         })
          
       }
     }catch(exception) {
       console.log('Delete failed')
-    }
+      this.setState({
+        notification: {
+          message: `Unable to delete blog - ${exception}`,
+          type: 'error'
+        }
+      })
   }
+}
 /**
  * Rendering function
  */
@@ -225,12 +235,14 @@ class App extends React.Component {
           />
         </Togglable>
         <div>
-        {this.state.blogs.map(blog => 
+        {this.state.blogs
+        .map(blog => 
           <Blog 
             key={blog._id} 
             blog={blog} 
             likeButtonAction={this.likeBlog}
             deleteButtonAction={this.deleteBlog}
+            deleteButtonVisible={blog.user===null || this.state.user.username === blog.user.username}
           />
         )}
         </div>
