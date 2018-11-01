@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+
 const BlogForm = ({handleSubmit, handleChange, title, author, url}) => {
   return (
     <div>
