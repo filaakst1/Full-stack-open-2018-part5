@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import './Notification.css';
+import './Notification.css'
 
-const Notification = ({notification}) => {
+const Notification = ({ notification }) => {
   if(notification !== null) {
     const clazz = notification.type === 'error' ? 'notification-error-div' : 'notification-info-div'
-    return ( 
-    <div className={clazz} >{notification.message}</div>
+    return (
+      <div className={clazz} >{notification.message}</div>
     )
   }return (<div></div>)
 
 }
 Notification.propTypes = {
-  notification: PropTypes.object
+  notification: PropTypes.object.isRequired
 }
 export default Notification
