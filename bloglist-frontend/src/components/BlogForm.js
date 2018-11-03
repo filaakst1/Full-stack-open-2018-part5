@@ -10,13 +10,13 @@ class BlogForm extends React.Component {
     }
   }
   toggleVisibility = () => {
-    this.setState({visible: !this.state.visible})
+    this.setState({ visible: !this.state.visible })
   }
 
   render() {
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
-    const showWhenVisible = { display: this.state.visible ? '' : 'none'}
-  
+    const showWhenVisible = { display: this.state.visible ? '' : 'none' }
+
     return (
       <div>
         <div style={hideWhenVisible} >
@@ -46,6 +46,6 @@ BlogForm.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired
-  
+
 }
 export default BlogForm
