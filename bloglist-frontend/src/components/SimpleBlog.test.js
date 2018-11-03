@@ -26,4 +26,21 @@ describe.only('<SimpleBlog />', () => {
 
   })
 
+  it('blog like button click', () => {
+    const blog = {
+      title: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
+      author: 'filaakst',
+      likes: 10
+    }
+    const onClickMock = jest.fn()
+    const simpleBlogComponent = shallow(<SimpleBlog blog={blog} onClick={onClickMock} />)
+    const button = simpleBlogComponent.find('button')
+    const amountOfClicks = 2
+    let i
+    for (i = 0; i < amountOfClicks; i++) {
+      button.simulate('click')
+    }
+    expect(onClickMock.mock.calls.length).toBe(amountOfClicks)
+  })
+
 })
