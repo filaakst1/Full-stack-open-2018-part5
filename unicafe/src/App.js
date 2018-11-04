@@ -1,12 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+//import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import Statistiikka from './components/Statistiikka'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   klik = (nappi) => () => {
     console.log(`Clicked ${nappi}`)
