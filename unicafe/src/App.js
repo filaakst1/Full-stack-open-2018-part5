@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import PropTypes from 'prop-types'
 import Statistiikka from './components/Statistiikka'
 
 class App extends React.Component {
@@ -25,5 +25,8 @@ class App extends React.Component {
       </div>
     )
   }
+}
+App.propTypes = {
+  store: PropTypes.object.isRequired
 }
 export default App
