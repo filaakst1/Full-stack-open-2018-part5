@@ -3,22 +3,18 @@ import ReactDOM from 'react-dom'
 
 import Statistiikka from './components/Statistiikka'
 
-import { createStore } from 'redux'
-import counterReducer from './reducer'
-
-const store = createStore(counterReducer)
-
-
 class App extends React.Component {
+  constructor(props) {
+    super(props)
+  }
 
   klik = (nappi) => () => {
-
     console.log(`Clicked ${nappi}`)
-    store.dispatch({ type: nappi })
+    this.props.store.dispatch({ type: nappi })
   }
 
   render() {
-    const state = store.getState()
+    const state = this.props.store.getState()
     return (
       <div>
         <h2>anna palautetta</h2>
@@ -30,11 +26,4 @@ class App extends React.Component {
     )
   }
 }
-
-const renderApp = () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
-}
-
-store.subscribe(renderApp)
-
 export default App
