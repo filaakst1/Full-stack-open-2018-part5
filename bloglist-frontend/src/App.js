@@ -38,7 +38,7 @@ class App extends React.Component {
       this.setState({ user })
       blogService.setToken(user.token)
     }
-  } 
+  }
   /**
    * Logout function
    */
