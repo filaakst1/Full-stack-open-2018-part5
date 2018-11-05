@@ -1,11 +1,8 @@
 import React from 'react'
 import AnecdoteList from './components/AnacdoteList'
 import AnecdoteForm from './components/AnecdoteForm'
-class App extends React.Component {
-  voteClick = (nappi) => () => {
-    console.log(`Clicked ${nappi}`)
-  }
 
+class App extends React.Component {
   render() {
     return (
       <div>

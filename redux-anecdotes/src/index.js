@@ -5,11 +5,8 @@ import { Provider } from 'react-redux'
 import App from './App'
 import reducer from './reducer'
 
-const store = createStore(reducer)
-
-
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={createStore(reducer)}>
     <App/>
   </Provider>,
   document.getElementById('root')

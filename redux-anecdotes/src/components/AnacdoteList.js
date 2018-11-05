@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import actionFor from '../actionCreators'
 import Anecdote from './Anecdote'
 
-
 class AnacdoteList extends React.Component {
+
   componentDidMount() {
     const { store } = this.context
     this.unsubscribe = store.subscribe(() =>
