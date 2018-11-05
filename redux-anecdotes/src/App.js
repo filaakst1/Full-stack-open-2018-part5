@@ -1,5 +1,6 @@
 import React from 'react'
 import AnecdoteList from './components/AnacdoteList'
+import AnecdoteForm from './components/AnecdoteForm'
 class App extends React.Component {
   voteClick = (nappi) => () => {
     console.log(`Clicked ${nappi}`)
@@ -9,12 +10,9 @@ class App extends React.Component {
     return (
       <div>
         <h2>Anecdotes</h2>
-        <AnecdoteList store={this.props.store}/>
+        <AnecdoteList />
         <h2>create new</h2>
-        <form>
-          <div><input /></div>
-          <button>create</button>
-        </form>
+        <AnecdoteForm />
       </div>
     )
   }
